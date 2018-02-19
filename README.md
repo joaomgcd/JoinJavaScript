@@ -25,6 +25,8 @@ var result = await devices.filter(device=>device.isAndroidPhone).sendPush({"text
 This example will send a push with the text **hello** to all Android phones you have. The **sendPush** function returns a promise, so you can await it if you're inside an async function.
 To learn what fields a push supports check out the [Join API Documentation](https://joaoapps.com/join/api/).
 
+You can check out an example similar to this in the [example.html](https://github.com/joaomgcd/JoinJavaScript/blob/master/example.html) file.
+
 You can run the [tests.html](https://github.com/joaomgcd/JoinJavaScript/blob/master/tests/tests.html) file on a local server to test if it's working for you.
 
 Let me know if you find any issues! :)
