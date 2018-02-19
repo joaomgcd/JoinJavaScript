@@ -92,7 +92,20 @@ export class Devices extends Array {
 		return Devices.fromArray(devicesResult.records);
 	}
 
-
+	sendPush(push,options){
+		var gcmPush = {
+			"push" : push
+		};
+		var gcmRaw = {
+			"json" : JSON.stringify(gcmPush),
+			"type" : "GCMPush"
+		};
+		var gcmOptions = {
+			"gcmRaw" : gcmRaw
+		}		
+		gcmOptions = Object.assign(gcmOptions, options);
+		return this.send(gcmOptions);
+	}
 	async send(options){
 		var groupsBySender = null;
 		if(options.forceServer){

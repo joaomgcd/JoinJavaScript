@@ -83,21 +83,11 @@ export class TestPush extends Test {
 	}
 	doIt(devices){
 		if(!devices || devices.length == 0) throw "No devices to send pushes to";
-		var gcmPush = {
-			"push" :{
-				"text":"ping"
-			}
-		};
-		var gcmRaw = {
-			"json" : JSON.stringify(gcmPush),
-			"type" : "GCMPush"
-		};
+		var push = {"text":"ping","apikey": this.apiKey};
 		var options = {
-			"gcmRaw" : gcmRaw,
-			"forceServer": this.forceServer,
-			"apiKey": this.apiKey
+			"forceServer": this.forceServer			
 		}		
-		return devices.send(options);
+		return devices.sendPush(push,options);
 	}
 	getResultsString(result){
 		if(!result) throw "No result from push";

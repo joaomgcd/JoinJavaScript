@@ -146,7 +146,7 @@ export class SenderServer extends Sender {
 		var result = null;
 		var deviceIds = options.devices.map(device=>device.deviceId).join(",");
 		if(options.gcmPush){
-			options.gcmPush.push.apikey = options.apiKey;
+			if(options.apiKey) options.gcmPush.push.apikey = options.apiKey;
 			options.gcmPush.push.deviceIds = deviceIds;
 			result = sendPush(options.gcmPush.push);
 		}else{
