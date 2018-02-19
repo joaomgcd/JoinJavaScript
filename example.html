@@ -6,7 +6,7 @@
 		import {Join}  from "./join.js";	
 		async function run(apikey){
 			try{
-				var join = new Join(apikey);
+				const join = new Join(apikey);
 				var result = await join.notify("Push from JavaScript","Hello World",device=>device.isChrome);
 				document.body.innerHTML = result.success 
 					? `Sent push to ${result.success} devices!` 
