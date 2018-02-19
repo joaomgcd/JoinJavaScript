@@ -83,10 +83,24 @@ export class Devices extends Array {
 		return devices;
 	}
 
-	static async fromServer(apiKey){
+	static async fromServer(apiKey,options){
 		if(!apiKey) throw "Api Key is missing";
-		var devicesResult = await listDevices(apiKey);
+		var devicesResult = null;
+		if(!options){
+			options = {};
+		}		
+		if(!options.forceRefresh){
+			var cachedDevicesJson = localStorage.joinCachedDevices;
+			if(cachedDevicesJson){
+				devicesResult = JSON.parse(cachedDevicesJson);
+			}
+		}	
+		if(!devicesResult){
+			devicesResult = await listDevices(apiKey);	
+			localStorage.joinCachedDevices = JSON.stringify(devicesResult);
+		}		
 		if(!devicesResult.success){
+			delete localStorage.joinCachedDevices
 			throw devicesResult.errorMessage;
 		}
 		return Devices.fromArray(devicesResult.records);
