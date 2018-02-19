@@ -96,7 +96,7 @@ export class Devices extends Array {
 			}
 		}	
 		if(!devicesResult){
-			devicesResult = await listDevices(apiKey);	
+			devicesResult = await listDevices(apiKey);
 			localStorage.joinCachedDevices = JSON.stringify(devicesResult);
 		}		
 		if(!devicesResult.success){

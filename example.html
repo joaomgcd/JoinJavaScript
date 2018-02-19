@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Join JavaScript Example</title>
+	<script type="module">
+		import {Devices}  from "./device.js";	
+		async function run(apikey){
+			try{
+			var devices = await Devices.fromServer(apikey);
+			var devicesToSendTo = devices.filter(device=>device.isAndroidPhone);
+			var result = await devicesToSendTo.sendPush({
+				"title":"Push from JavaScript",
+				"text":"Hello World!",
+				"apikey":apikey
+			});
+			document.body.innerHTML = result.success 
+				? `Sent push to ${devicesToSendTo.map(device=>device.deviceName).join(", ")}!` 
+				: `Error: ${result.errorMessage}`;				
+			}catch(e){
+				document.body.innerHTML = e;
+			}
+		}
+
+		const API_KEY = "YOUR_ACTUAL_API_KEY";
+		run(API_KEY);
+	</script>
+</head>
+<body>
+
+</body>
+</html>
