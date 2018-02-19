@@ -1,0 +1,33 @@
+#tests{
+	margin-top: 16px;
+	display: flex;
+	flex-wrap: wrap;
+
+}
+.test{
+	padding: 16px;
+	margin-bottom: 16px;
+	color: white;
+}
+.test .title{
+	font-size: 150%;
+	margin-bottom: 16px;
+    text-transform: uppercase;
+}
+[success=true]{
+	background: green;
+}
+[success=false]{
+	background: red;
+}
+.card {
+  border-radius: 2px;
+  margin: 1rem;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  cursor: pointer;
+}
+.card:hover {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}

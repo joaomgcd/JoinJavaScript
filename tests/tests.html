@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Join JavaScript Tests</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="module">
+		import * as Tests from "./tests.js";	
+		async function run(apiKey){
+				var testsElement = document.querySelector("#tests");
+				testsElement.innerHTML = "";
+				
+				await new Tests.TestAutoAppsCommand(testsElement,command=>{
+					if(command.command != "lights") throw `Wrong command: ${command.command}. Should be "lights"`;
+				}).test({"command":"lights=:=on=:=1=:=2=:=3","variables":"status,delay","parseNumbers":true});
+
+				var devices = await new Tests.TestListDevices(testsElement).test({"apiKey":apiKey});		
+				if(!devices) return;
+				await new Tests.TestFindDevice(testsElement,"Android Phone",device=>device.isAndroidPhone).test(devices);
+				await new Tests.TestFindDevice(testsElement,"IP",device=>device.isIP).test(devices);
+				await new Tests.TestFindDevice(testsElement,"Android Tablet",device=>device.isAndroidTablet).test(devices);
+				//await new Tests.TestPush(testsElement,"Push to IFTTT").test(devices.filter(device=>device.isIFTTT));
+				//await new Tests.TestPush(testsElement,"Push to IP").test(devices.filter(device=>device.isIP));
+				await new Tests.TestPush(testsElement,"Push to IP via Server",true,apiKey).test(devices.filter(device=>device.isIP));
+				
+		}
+		var inputApiKey = document.querySelector("#inputApiKey");
+		var buttonRun = document.querySelector("#buttonRun");
+		buttonRun.onclick = e => {
+			var apiKey = inputApiKey.value;
+			localStorage.apiKey = apiKey;
+			run(apiKey);
+		}
+		var existingApiKey = localStorage.apiKey;
+		if(existingApiKey){
+			inputApiKey.value = existingApiKey;
+			run(existingApiKey);
+		}
+	</script>
+</head>
+<body>
+	<h1>Join Tests</h1>
+	<input placeholder="Your API Key" id="inputApiKey"></input>
+	<input type="button" value="Run" id="buttonRun"></input>
+	<div id="tests">
+		
+	</div>
+</body>
+</html>
