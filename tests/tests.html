@@ -9,18 +9,24 @@
 				var testsElement = document.querySelector("#tests");
 				testsElement.innerHTML = "";
 				
-				await new Tests.TestAutoAppsCommand(testsElement,command=>{
+				var tests = new Tests.Tests(testsElement,apiKey);
+				tests.push(new Tests.TestAutoAppsCommand({"command":"lights=:=on=:=1=:=2=:=3","variables":"status,delay","parseNumbers":true},command=>{
 					if(command.command != "lights") throw `Wrong command: ${command.command}. Should be "lights"`;
-				}).test({"command":"lights=:=on=:=1=:=2=:=3","variables":"status,delay","parseNumbers":true});
-
-				var devices = await new Tests.TestListDevices(testsElement).test({"apiKey":apiKey});		
+				}));
+				tests.push(new Tests.TestListDevices());
+				var devices = await tests.join.devices;
 				if(!devices) return;
-				await new Tests.TestFindDevice(testsElement,"Android Phone",device=>device.isAndroidPhone).test(devices);
-				await new Tests.TestFindDevice(testsElement,"IP",device=>device.isIP).test(devices);
-				await new Tests.TestFindDevice(testsElement,"Android Tablet",device=>device.isAndroidTablet).test(devices);
+
+				tests.push(new Tests.TestFindDevice("Android Phone",device=>device.isAndroidPhone));
+				tests.push(new Tests.TestFindDevice("IP",device=>device.isIP));
+				tests.push(new Tests.TestFindDevice("Chrome",device=>device.isChrome));
+				tests.push(new Tests.TestPush("Push to Chrome directly",false,device=>device.isChrome));
+				tests.push(new Tests.TestPush("Push to Android via Server",true,device=>device.isAndroid));
+				tests.push(new Tests.TestPushSingleDevice(devices.find(device=>device.isChrome)));
+				console.log(await tests.test());
+				
 				//await new Tests.TestPush(testsElement,"Push to IFTTT").test(devices.filter(device=>device.isIFTTT));
 				//await new Tests.TestPush(testsElement,"Push to IP").test(devices.filter(device=>device.isIP));
-				await new Tests.TestPush(testsElement,"Push to IP via Server",true,apiKey).test(devices.filter(device=>device.isIP));
 				
 		}
 		var inputApiKey = document.querySelector("#inputApiKey");

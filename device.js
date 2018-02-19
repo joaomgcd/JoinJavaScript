@@ -14,8 +14,14 @@ export class Device {
 	get isAndroidTablet(){
 		return this.isAnyType(Devices.TYPE_ANDROID_TABLET);
 	}
+	get isAndroid(){
+		return this.isAndroidPhone || this.isAndroidTablet;
+	}
 	get isChrome(){
 		return this.isAnyType(Devices.TYPE_CHROME_BROWSER);
+	}
+	get isWindows10(){
+		return this.isAnyType(Devices.TYPE_WINDOWS_10);
 	}
 	get isGCM(){
 		return this.isAndroidPhone || this.isAndroidTablet || this.isChrome;
@@ -39,19 +45,17 @@ export class Device {
 	get sender(){
 		return new this.senderClass();
 	}
-	/*send(options){
-		var gcmRaw = options.gcmRaw;
-		if(!gcmRaw || !gcmRaw.json || !gcmRaw.type) return Promise.reject("Missing gcmRaw in options");
-
-		options.devices = [this];
-		options.gcmParams = {};
-		if(this.onlySendPushes){
-			var gcmPush = JSON.parse(gcmRaw.json);
-			if(!gcmPush || !gcmPush.push) return Promise.reject("Can only send GCMPush");
-			options.gcmPush = gcmPush;
-		}
-		return this.sender.send(options);
-	}*/
+	get asDevices(){
+		var devices = new Devices();
+		devices.push(this);
+		return devices;
+	}
+	send(options){
+		this.asDevices.send(options);
+	}
+	sendPush(push,options){
+		this.asDevices.sendPush(push,options);
+	}
 }
 
 export class Devices extends Array {

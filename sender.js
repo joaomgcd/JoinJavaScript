@@ -155,10 +155,14 @@ export class SenderServer extends Sender {
 			result = sendRawGcm(rawGcmWithOptions);
 		}
 		result = await result;
-		if(!result.success){
-			return new SendResults([new SendResult(null,false,result.errorMessage)]);
-		}else{
-			return new SendResults([new SendResult(SendResult.newMessageId,true)]);
+		var sendResults = new SendResults();
+		for(var device of options.devices){
+			if(!result.success){
+				sendResults.push(new SendResult(null,false,result.errorMessage));
+			}else{
+				sendResults.push(new SendResult(SendResult.newMessageId,true));
+			}
 		}
+		return sendResults;
 	}
 }

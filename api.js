@@ -1,6 +1,6 @@
 
 import {post,get} from "./web.js";
-const USE_LOCAL_SERVER = true;
+const USE_LOCAL_SERVER = false;
 const JOIN_SERVER_LOCAL = "http://localhost:8080";
 const JOIN_SERVER = "https://joinjoaomgcd.appspot.com";
 const JOIN_BASE_URL = `${USE_LOCAL_SERVER ? JOIN_SERVER_LOCAL : JOIN_SERVER}/_ah/api/`;

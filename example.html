@@ -3,18 +3,13 @@
 <head>
 	<title>Join JavaScript Example</title>
 	<script type="module">
-		import {Devices}  from "./device.js";	
+		import {Join}  from "./join.js";	
 		async function run(apikey){
 			try{
-				var devices = await Devices.fromServer(apikey);
-				var devicesToSendTo = devices.filter(device=>device.isAndroidPhone);
-				var result = await devicesToSendTo.sendPush({
-					"title":"Push from JavaScript",
-					"text":"Hello World!",
-					"apikey":apikey
-				});
+				var join = new Join(apikey);
+				var result = await join.notify("Push from JavaScript","Hello World",device=>device.isChrome);
 				document.body.innerHTML = result.success 
-					? `Sent push to ${devicesToSendTo.map(device=>device.deviceName).join(", ")}!` 
+					? `Sent push to ${result.success} devices!` 
 					: `Error: ${result.errorMessage}`;				
 			}catch(e){
 				document.body.innerHTML = e;
