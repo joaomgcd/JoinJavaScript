@@ -101,7 +101,7 @@ export class TestPush extends Test {
 		var options = {
 			"forceServer": this.forceServer			
 		}		
-		return join.sendCommand("ping",this.deviceFilter,options);
+		return join.sendCommand("test=:=prash=:=João=:=threee",this.deviceFilter,options);
 	}
 	getResultsString(result){
 		if(!result) throw "No result from push";

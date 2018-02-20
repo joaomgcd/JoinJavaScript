@@ -120,22 +120,30 @@ export class SenderIFTTT extends Sender {
 		if(!text) return Promise.reject("Push to IFTTT needs text");
 
 		return Promise.all(options.devices.map(device=>{			
-			var autoAppsCommand = new AutoAppsCommand(text);
+			var autoAppsCommand = new AutoAppsCommand(text,"value1,value2,value3");
 			var valuesForIfttt = {};
+			var url = `https://maker.ifttt.com/trigger/${autoAppsCommand.command}/with/key/${device.regId}`;
+			if(autoAppsCommand.values.length > 0){
+				url += "?"
+			}
 			for (var i = 0; i < autoAppsCommand.values.length; i++) {
 				var value = autoAppsCommand.values[i]
-				valuesForIfttt[`value${i+1}`] = value;
+				var varName = `value${i+1}`;
+				valuesForIfttt[varName] = value;
+				if(i>0){
+					url += "&";
+				}
+				url += `${varName}=${encodeURIComponent(value)}`;
 			}
-			console.log(valuesForIfttt);
+			//console.log(valuesForIfttt);
 			var postOptions = {
-				method: 'POST',
-				body: JSON.stringify(valuesForIfttt), 
+				method: 'GET',
+				//body: JSON.stringify(valuesForIfttt), 
 				headers: {
 					'Content-Type': 'application/json; charset=UTF-8'
 				}
 			}
-			var url = `https://maker.ifttt.com/trigger/${autoAppsCommand.command}/with/key/${device.regId}`;
-			console.log(url);
+			//console.log(url);
 			return fetch(url,postOptions).then(result=>Sender.newSuccessResult).catch(error=>Sender.newSuccessResult).then(result => (new SendResults([result])));
 		}));
 	}

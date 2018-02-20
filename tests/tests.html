@@ -23,10 +23,8 @@
 				tests.push(new Tests.TestPush("Push to Chrome directly",false,device=>device.isChrome));
 				tests.push(new Tests.TestPush("Push to Android via Server",true,device=>device.isAndroid));
 				tests.push(new Tests.TestPushSingleDevice(devices.find(device=>device.isChrome)));
+				tests.push( new Tests.TestPush("Push to IFTTT",false,device=>device.isIFTTT));
 				console.log(await tests.test());
-				
-				//await new Tests.TestPush(testsElement,"Push to IFTTT").test(devices.filter(device=>device.isIFTTT));
-				//await new Tests.TestPush(testsElement,"Push to IP").test(devices.filter(device=>device.isIP));
 				
 		}
 		var inputApiKey = document.querySelector("#inputApiKey");
