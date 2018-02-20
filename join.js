@@ -14,6 +14,28 @@ export class Join {
 	async sendPush(push,deviceFilter,options){
 		push.apikey = this.apiKey;
 		var devices = await this.devices;
+		var devicesByPushProperties = null;
+		if(push.deviceIds){
+			if(!devicesByPushProperties) devicesByPushProperties = [];
+			var split = push.deviceIds.split(",");
+			devicesByPushProperties = devicesByPushProperties.concat(devices.filter(device=>split.indexOf(device.deviceId)>=0));
+		}
+		if(push.deviceNames){
+			if(!devicesByPushProperties) devicesByPushProperties = [];
+			var split = push.deviceNames.split(",").map(name=>name.toLowerCase());
+			devicesByPushProperties = devicesByPushProperties.concat(devices.filter(device=>{
+				var deviceName = device.deviceName.toLowerCase();
+				for(var inputName of split){
+					if(deviceName.indexOf(inputName)>=0){
+						return true;
+					}
+				}
+				return false;
+			}));
+		}
+		if(devicesByPushProperties){
+			devices = Devices.fromArray(devicesByPushProperties);
+		}
 		if(deviceFilter){
 			if(typeof deviceFilter == "function"){
 				devices = devices.filter(deviceFilter);	

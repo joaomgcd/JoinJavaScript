@@ -114,6 +114,29 @@ export class TestPush extends Test {
 	}
 
 }
+export class TestPushWithDeviceName extends Test {
+	constructor(title, deviceName){
+		super();
+		this.pushesTitle = title || "Send Pushes";
+		this.deviceName = deviceName;
+	}
+	get title(){
+		return this.pushesTitle;
+	}
+	async doIt(join){
+		return join.sendPush({"title":"Wow!","text":"ping","deviceNames":this.deviceName});
+	}
+	getResultsString(result){
+		if(!result) throw "No result from push";
+		if(result.failure>0){
+			var failure = result.find(result=>!result.success);
+			var errorMessage = failure.message || "Couldn't send push"
+			throw errorMessage;
+		}
+		return `Sucess: ${result.success}; Failure: ${result.failure}`;
+	}
+
+}
 export class TestPushSingleDevice extends Test {
 	constructor(device){
 		super();

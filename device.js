@@ -1,4 +1,4 @@
-import { SenderGCM,SenderIP,SenderIFTTT,SenderServer,SendResults } from './sender.js';
+import { Sender,SenderGCM,SenderIP,SenderIFTTT,SenderServer,SendResults } from './sender.js';
 import {listDevices} from './api.js';
 import './extensions.js';
 export class Device {
@@ -111,6 +111,9 @@ export class Devices extends Array {
 	}
 
 	sendPush(push,options){
+		if(!push.id){
+			push.id = Sender.newMessageId;
+		}
 		var gcmPush = {
 			"push" : push
 		};

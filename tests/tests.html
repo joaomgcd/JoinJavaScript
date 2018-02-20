@@ -20,10 +20,11 @@
 				tests.push(new Tests.TestFindDevice("Android Phone",device=>device.isAndroidPhone));
 				tests.push(new Tests.TestFindDevice("IP",device=>device.isIP));
 				tests.push(new Tests.TestFindDevice("Chrome",device=>device.isChrome));
-				tests.push(new Tests.TestPush("Push to Chrome directly",false,device=>device.isChrome));
+				/*tests.push(new Tests.TestPush("Push to Chrome directly",false,device=>device.isChrome));
 				tests.push(new Tests.TestPush("Push to Android via Server",true,device=>device.isAndroid));
 				tests.push(new Tests.TestPushSingleDevice(devices.find(device=>device.isChrome)));
-				tests.push( new Tests.TestPush("Push to IFTTT",false,device=>device.isIFTTT));
+				tests.push( new Tests.TestPush("Push to IFTTT",false,device=>device.isIFTTT));*/
+				tests.push( new Tests.TestPushWithDeviceName("Push With Device Name Nexus 5X","Nexus 5"));
 				console.log(await tests.test());
 				
 		}
